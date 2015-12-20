@@ -9,10 +9,12 @@ Window {
         onClicked: {
             Qt.quit();
         }
+        onExited: {
+            console.log("on exit")
+        }
+    }
+    Card {
+
     }
 
-    Text {
-        text: qsTr("Hello World")
-        anchors.centerIn: parent
-    }
 }
