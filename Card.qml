@@ -4,17 +4,23 @@ Item {
     id: root
     property string fibbonachiNumber: ""
 
-    property bool flipped: true
+    property bool flipped: false
+    property bool isSelected: false
     property int xAxis: 0
     property int yAxis: 0
     property int angle: 0
+    signal selected()
+
+    function showCard() {
+        flipped = false
+    }
 
     Flipable {
         anchors.centerIn: parent
         width: root.width - 4
         height: root.height - 4
         front: Rectangle {
-            color: "green"
+            color: "white"
             border.color: "black"
             border.width: 2
             radius: 5
@@ -24,7 +30,7 @@ Item {
                 anchors.centerIn: parent
                 color: "black"
                 font.bold: true
-                font.pixelSize: 32
+                font.pixelSize: root.height/3
             }
         }
         back: Image {
@@ -34,7 +40,15 @@ Item {
 
         state: "spina"
 
-        MouseArea { anchors.fill: parent; onClicked: root.flipped = !root.flipped }
+        MouseArea {
+            anchors.fill: parent;
+            onClicked: {
+                if (!isSelected) {
+                    root.flipped = !root.flipped
+                    root.selected()
+                }
+            }
+        }
 
         transform: Rotation {
             id: rotation

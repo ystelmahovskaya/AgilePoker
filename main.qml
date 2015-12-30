@@ -1,12 +1,19 @@
 import QtQuick 2.5
+import QtQuick.Controls 1.4
 import QtQuick.Window 2.2
 
 Window {
+    id: root
     visible: true
     width: 800
     height: 600
-    property var numbers: ["0", "½", "1", "2", "3", "5", "8", "13", "20", "40", "100", "?", "coffee", "infinite"]
+    property var numbers: ["0", "½", "1", "2", "3", "5", "8", "13", "20", "40", "100", "?", "\u2615", "\u221E"]
 
+    property int selectedIndex: -1
+
+    onSelectedIndexChanged: {
+        grid.model = 1
+    }
 
     Rectangle {
         anchors.fill: parent
@@ -29,12 +36,35 @@ Window {
             }
         }
 
+        Button {
+            anchors.top: parent.top
+            text: "Show!"
+            onClicked: {
+                grid.currentItem.showCard()
+            }
+        }
+
         GridView {
             id: grid
-            anchors.fill: parent
+            anchors.centerIn: parent
+            width: parent.width
+            height: parent.height
             model: 14
             cellWidth: 100
             cellHeight: 150
+            onCountChanged: {
+                if (count == 1 && selectedIndex >= 0 && selectedIndex < numbers.length && currentItem != null) {
+                    //console.log("currentitem", currentItem, selectedIndex, root.numbers[selectedIndex])
+                    currentItem.fibbonachiNumber = root.numbers[selectedIndex]
+                    currentItem.flipped = true
+                    currentItem.isSelected = true
+                    cellWidth = 200
+                    cellHeight = 300
+                    width = cellWidth
+                    height = cellHeight
+                }
+            }
+
             delegate: Card {
                 id: card
                 width: grid.cellWidth
@@ -42,6 +72,9 @@ Window {
                 fibbonachiNumber: numbers[index]
                 angle: 180
                 yAxis: 1
+                onSelected: {
+                    selectedIndex = index
+                }
             }
         }
     }
