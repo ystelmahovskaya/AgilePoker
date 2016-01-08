@@ -1,6 +1,7 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Window 2.2
+import Qt.WebSockets 1.0
 
 Window {
     id: root
@@ -13,6 +14,22 @@ Window {
 
     onSelectedIndexChanged: {
         grid.model = 1
+    }
+
+    WebSocket {
+        id: webSocket
+        active: false
+        url: "ws://127.0.0.1:2345"
+        onStatusChanged: {
+            if (status === WebSocket.Open) {
+                console.log("Connected to server!!")
+                sendTextMessage("Hello server")
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        webSocket.active = true
     }
 
     Rectangle {
