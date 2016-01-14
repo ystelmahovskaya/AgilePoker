@@ -30,6 +30,7 @@ Window {
 
     Component.onCompleted: {
         webSocket.active = true
+        searchServer.startSearch(2345);
     }
 
     Rectangle {

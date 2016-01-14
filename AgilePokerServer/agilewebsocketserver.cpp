@@ -1,6 +1,7 @@
 #include "agilewebsocketserver.h"
 #include "QtWebSockets/QWebSocketServer"
 #include "QtWebSockets/QWebSocket"
+#include <QUdpSocket>
 #include <QtCore/QDebug>
 
 AgileWebSocketServer::AgileWebSocketServer(quint16 port, QObject *parent) :
@@ -16,10 +17,27 @@ AgileWebSocketServer::AgileWebSocketServer(quint16 port, QObject *parent) :
         qDebug() << "Chat Server listening on port" << port;
         connect(m_pWebSocketServer, &QWebSocketServer::newConnection,
                 this, &AgileWebSocketServer::onNewConnection);
+        _udpSocket = new QUdpSocket;
+        _udpSocket->bind(port, QUdpSocket::ShareAddress);
+        connect(_udpSocket, SIGNAL(readyRead()),
+                this, SLOT(processPendingDatagrams()));
     }
 
 }
 
+void AgileWebSocketServer::processPendingDatagrams()
+{
+    while (_udpSocket->hasPendingDatagrams()) {
+        QByteArray datagram;
+        datagram.resize(_udpSocket->pendingDatagramSize());
+        QHostAddress sender;
+        quint16 senderPort;
+        _udpSocket->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
+        if (datagram.contains("Are you AgilePocker?")) {
+            qDebug() << "FOund agile pocker client at" << sender << senderPort;
+        }
+    }
+}
 
 AgileWebSocketServer::~AgileWebSocketServer()
 {
