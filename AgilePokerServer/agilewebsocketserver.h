@@ -26,6 +26,7 @@ private:
     QWebSocketServer *m_pWebSocketServer;
     QList<QWebSocket *> m_clients;
     QUdpSocket *_udpSocket;
+    int m_port;
 };
 
 #endif // AGILEWEBSOCKETSERVER_H

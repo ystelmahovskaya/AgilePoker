@@ -13,6 +13,8 @@ signals:
 
 public slots:
     void startSearch(int port);
+private slots:
+    void processPendingDatagrams();
 private:
     QUdpSocket *_udpSocket;
 };

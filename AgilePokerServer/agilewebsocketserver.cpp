@@ -7,7 +7,8 @@
 AgileWebSocketServer::AgileWebSocketServer(quint16 port, QObject *parent) :
     QObject(parent),
     m_pWebSocketServer(Q_NULLPTR),
-    m_clients()
+    m_clients(),
+    m_port(port)
 {
     m_pWebSocketServer = new QWebSocketServer(QStringLiteral("Chat Server"),
                                               QWebSocketServer::NonSecureMode,
@@ -34,7 +35,12 @@ void AgileWebSocketServer::processPendingDatagrams()
         quint16 senderPort;
         _udpSocket->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
         if (datagram.contains("Are you AgilePocker?")) {
-            qDebug() << "FOund agile pocker client at" << sender << senderPort;
+            qDebug() << "Found agile pocker client at" << sender << senderPort;
+            QByteArray datagramAnswer;
+            datagramAnswer = "Yes, I'm";
+            qint64 written = _udpSocket->writeDatagram(datagramAnswer.data(), datagramAnswer.size(),
+                                     QHostAddress::LocalHost, m_port + 1);
+            qDebug() << "server send" << written << "bytes to" << sender << m_port;
         }
     }
 }
