@@ -19,7 +19,7 @@ Window {
     WebSocket {
         id: webSocket
         active: false
-        url: "ws://127.0.0.1:2345"
+        //url: "ws://127.0.0.1:2345"
         onStatusChanged: {
             if (status === WebSocket.Open) {
                 console.log("Connected to server!!")
@@ -28,8 +28,16 @@ Window {
         }
     }
 
+    Connections {
+        target: searchServer
+        onFoundServer: {
+            webSocket.url = "ws://" + serverAddress + ":2345"
+            webSocket.active = true
+            console.log("found server at", serverAddress)
+        }
+    }
+
     Component.onCompleted: {
-        webSocket.active = true
         searchServer.startSearch(2345);
     }
 
@@ -54,13 +62,13 @@ Window {
             }
         }
 
-        Button {
-            anchors.top: parent.top
-            text: "Show!"
-            onClicked: {
-                grid.currentItem.showCard()
-            }
-        }
+//        Button {
+//            anchors.top: parent.top
+//            text: "Show!"
+//            onClicked: {
+//                grid.currentItem.showCard()
+//            }
+//        }
 
         GridView {
             id: grid

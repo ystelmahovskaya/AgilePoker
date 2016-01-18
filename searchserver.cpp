@@ -28,6 +28,7 @@ void SearchServer::processPendingDatagrams()
         qDebug() << "datagram" << datagram;
         if (datagram.contains("Yes, I'm")) {
             qDebug() << "Found agile pocker server at" << sender << senderPort;
+            emit foundServer(sender.toString());
         }
     }
 }

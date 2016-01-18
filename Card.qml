@@ -46,6 +46,8 @@ Item {
                 if (!isSelected) {
                     root.flipped = !root.flipped
                     root.selected()
+                } else {
+                    showCard()
                 }
             }
         }

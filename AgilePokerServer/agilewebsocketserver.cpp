@@ -39,7 +39,7 @@ void AgileWebSocketServer::processPendingDatagrams()
             QByteArray datagramAnswer;
             datagramAnswer = "Yes, I'm";
             qint64 written = _udpSocket->writeDatagram(datagramAnswer.data(), datagramAnswer.size(),
-                                     QHostAddress::LocalHost, m_port + 1);
+                                     sender, m_port + 1);
             qDebug() << "server send" << written << "bytes to" << sender << m_port;
         }
     }

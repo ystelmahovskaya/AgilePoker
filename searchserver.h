@@ -10,6 +10,7 @@ public:
     explicit SearchServer(QObject *parent = 0);
 
 signals:
+    void foundServer(QString serverAddress);
 
 public slots:
     void startSearch(int port);
