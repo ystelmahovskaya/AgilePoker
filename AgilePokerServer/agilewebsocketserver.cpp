@@ -6,6 +6,7 @@
 #include <QString>
 #include <QtCore/QDebug>
 #include <QSettings>
+#include <QQmlEngine>
 
 AgileWebSocketServer::AgileWebSocketServer(quint16 port, QObject *parent) :
     QObject(parent),
@@ -20,7 +21,7 @@ AgileWebSocketServer::AgileWebSocketServer(quint16 port, QObject *parent) :
         Users users;
         users.userName = settings.value("userName").toString();
         users.hash = settings.value("hash").toByteArray();
-        m_usersList.append(users);
+        //m_usersList.append(users);
     }
     settings.endArray();
 
@@ -97,29 +98,33 @@ void AgileWebSocketServer::addNewUser(const QString &message) {
     users.userName = user.at(1);
     users.hash = QCryptographicHash::hash(QByteArray(user.at(1).toUtf8() + pass.at(1).toUtf8()),
                                           QCryptographicHash::Sha1);
-    m_usersList.append(users);
-    QSettings settings;
-    settings.beginWriteArray("users");
-    for (int i = 0; i < m_usersList.size(); ++i) {
-        settings.setArrayIndex(i);
-        settings.setValue("userName", m_usersList.at(i).userName);
-        settings.setValue("hash", m_usersList.at(i).hash);
-    }
-    settings.endArray();}
+    //m_usersList.append(users);
+//    QSettings settings;
+//    settings.beginWriteArray("users");
+//    for (int i = 0; i < m_usersList.size(); ++i) {
+//        settings.setArrayIndex(i);
+//        settings.setValue("userName", m_usersList.at(i).userName);
+//        settings.setValue("hash", m_usersList.at(i).hash);
+//    }
+//    settings.endArray();
+}
+
+void AgileWebSocketServer::setUsersModel(UsersModel *value)
+{
+    usersModel = value;
+}
+
+UsersModel *AgileWebSocketServer::getUsersModel()
+{
+    return usersModel;
+}
 
 void AgileWebSocketServer::processMessage(QString message)
 {
     QWebSocket *pSender = qobject_cast<QWebSocket *>(sender());
     qDebug() << "Message:" << message << "from" << pSender->localAddress();
-    if (message.startsWith("NEWUSER")) {
-        addNewUser(message);
-    }
-//    Q_FOREACH (QWebSocket *pClient, m_clients)
-//    {
-//        if (pClient != pSender) //don't echo message back to sender
-//        {
-//            pClient->sendTextMessage(message);
-//        }
+//    if (message.startsWith("NEWUSER")) {
+//        addNewUser(message);
 //    }
 }
 

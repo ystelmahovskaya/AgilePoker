@@ -5,15 +5,11 @@
 #include <QtCore/QList>
 #include <QtCore/QByteArray>
 #include <QHostAddress>
+#include "usersmodel.h"
 class QWebSocketServer;
 class QWebSocket;
 class QUdpSocket;
 
-struct Users {
-    QHostAddress address;
-    QString userName;
-    QByteArray hash;
-};
 
 class AgileWebSocketServer : public QObject
 {
@@ -21,6 +17,10 @@ class AgileWebSocketServer : public QObject
 public:
     explicit AgileWebSocketServer(quint16 port, QObject *parent = 0);
     virtual ~AgileWebSocketServer();
+
+    Q_INVOKABLE UsersModel *getUsersModel();
+
+    void setUsersModel(UsersModel *value);
 
 private Q_SLOTS:
     void onNewConnection();
@@ -34,9 +34,7 @@ private:
     QList<QWebSocket *> m_clients;
     QUdpSocket *_udpSocket;
     int m_port;
-    QList<Users> m_loggedUsersList;
-    QList<Users> m_usersList;
-
+    UsersModel *usersModel;
 };
 
 #endif // AGILEWEBSOCKETSERVER_H

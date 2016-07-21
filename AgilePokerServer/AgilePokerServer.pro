@@ -4,7 +4,8 @@ QT += qml quick websockets
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    agilewebsocketserver.cpp
+    agilewebsocketserver.cpp \
+    usersmodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -15,4 +16,5 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
-    agilewebsocketserver.h
+    agilewebsocketserver.h \
+    usersmodel.h
